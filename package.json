@@ -1,0 +1,16 @@
+{
+  "name": "taco-miniapp",
+  "version": "1.0.0",
+  "description": "塔可点餐小程序",
+  "scripts": {
+    "dev:mp-weixin": "uni -p mp-weixin",
+    "build:mp-weixin": "uni build -p mp-weixin" 
+  },
+  "dependencies": {
+    "vue": "^3.3.4"
+  },
+  "devDependencies": {
+    "@dcloudio/uni-app": "*",
+    "@dcloudio/uni-mp-weixin": "*"
+  }
+}
