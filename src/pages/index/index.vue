@@ -89,28 +89,37 @@ export default {
   },
   methods: {
     async login() {
-      const token = uni.getStorageSync('token')
-      if (!token) {
-        const { code } = await uni.login({ provider: 'weixin' })
-        const res = await authApi.login(code)
-        // 兼容你是否在 request.js 里包装了 res.data
-        uni.setStorageSync('token', res.data || res)
+      try {
+        const token = uni.getStorageSync('token')
+        if (!token) {
+          const { code } = await uni.login({ provider: 'weixin' })
+          const res = await authApi.login(code)
+          uni.setStorageSync('token', res.data || res)
+        }
+        this.loadMenu() // 登录成功后再去加载菜单
+      } catch (err) {
+        console.error('微信登录失败，请检查后端是否启动:', err)
+        uni.showToast({ title: '登录失败，请重试', icon: 'none' })
+        this.loadMenu() 
       }
-      this.loadMenu()
     },
     async loadMenu() {
-      // 修复点：加入 Loading 交互，防止网络慢时白屏干等
       uni.showLoading({ title: '加载菜单中...', mask: true })
       try {
         const res = await productApi.getMenu()
-        // 兼容数据结构层级
-        this.menu = res.data || res
+        let data = res.data || res
+        if (!Array.isArray(data)) {
+          console.error('⚠️ 后端返回的不是分类数组，请检查后端接口:', data)
+          data = [] 
+          uni.showToast({ title: '接口数据异常', icon: 'none' })
+        }
         
-        // 修复点：默认选中分类改为 id
+        this.menu = data
         if (this.menu && this.menu.length > 0) {
           this.currentCat = this.menu[0].id
         }
       } catch (err) {
+        console.error('加载菜单异常:', err)
         uni.showToast({ title: '加载失败', icon: 'none' })
       } finally {
         uni.hideLoading()

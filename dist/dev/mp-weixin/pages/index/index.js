@@ -25,23 +25,36 @@ const _sfc_main = {
   },
   methods: {
     async login() {
-      const token = common_vendor.index.getStorageSync("token");
-      if (!token) {
-        const { code } = await common_vendor.index.login({ provider: "weixin" });
-        const res = await api_index.authApi.login(code);
-        common_vendor.index.setStorageSync("token", res.data || res);
+      try {
+        const token = common_vendor.index.getStorageSync("token");
+        if (!token) {
+          const { code } = await common_vendor.index.login({ provider: "weixin" });
+          const res = await api_index.authApi.login(code);
+          common_vendor.index.setStorageSync("token", res.data || res);
+        }
+        this.loadMenu();
+      } catch (err) {
+        console.error("微信登录失败，请检查后端是否启动:", err);
+        common_vendor.index.showToast({ title: "登录失败，请重试", icon: "none" });
+        this.loadMenu();
       }
-      this.loadMenu();
     },
     async loadMenu() {
       common_vendor.index.showLoading({ title: "加载菜单中...", mask: true });
       try {
         const res = await api_index.productApi.getMenu();
-        this.menu = res.data || res;
+        let data = res.data || res;
+        if (!Array.isArray(data)) {
+          console.error("⚠️ 后端返回的不是分类数组，请检查后端接口:", data);
+          data = [];
+          common_vendor.index.showToast({ title: "接口数据异常", icon: "none" });
+        }
+        this.menu = data;
         if (this.menu && this.menu.length > 0) {
           this.currentCat = this.menu[0].id;
         }
       } catch (err) {
+        console.error("加载菜单异常:", err);
         common_vendor.index.showToast({ title: "加载失败", icon: "none" });
       } finally {
         common_vendor.index.hideLoading();
