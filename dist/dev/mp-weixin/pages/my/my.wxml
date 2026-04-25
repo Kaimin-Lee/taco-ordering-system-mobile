@@ -1,0 +1,1 @@
+<view class="container"><view class="profile"><text class="title">个人中心</text></view><view class="menu"><view class="menu-item" bindtap="{{a}}"><text>退出登录</text></view></view></view>

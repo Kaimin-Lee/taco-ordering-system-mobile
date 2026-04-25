@@ -1,4 +1,5 @@
 // 全局购物车状态
+import { reactive } from 'vue'
 const cart = {
   items: [],
 

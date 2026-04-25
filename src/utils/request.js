@@ -12,8 +12,8 @@ const request = (url, options = {}) => {
         'Authorization': token ? `Bearer ${token}` : ''
       },
       success: (res) => {
-        if (res.data.code === 200) {
-          resolve(res.data)
+        if (res.statusCode === 200) { 
+            resolve({ data: res.data }) 
         } else {
           uni.showToast({ title: res.data.message || '请求失败', icon: 'none' })
           reject(res.data)

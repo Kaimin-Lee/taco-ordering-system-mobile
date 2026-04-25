@@ -5,12 +5,6 @@
     "pages/order/submit",
     "pages/my/my"
   ],
-  "window": {
-    "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#409eff",
-    "navigationBarTitleText": "塔可点餐",
-    "navigationBarTextStyle": "white"
-  },
   "tabBar": {
     "color": "#999",
     "selectedColor": "#409eff",
@@ -36,6 +30,5 @@
       }
     ]
   },
-  "usingComponents": {},
-  "sitemapLocation": "sitemap.json"
+  "usingComponents": {}
 }

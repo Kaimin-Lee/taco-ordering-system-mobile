@@ -7,16 +7,16 @@
 
     <view class="menu">
       <view class="category-nav">
-        <view v-for="cat in menu" :key="cat.categoryId"
-          :class="['cat-item', currentCat === cat.categoryId ? 'active' : '']"
-          @click="currentCat = cat.categoryId">
-          {{ cat.categoryName }}
+        <view v-for="cat in menu" :key="cat.id"
+          :class="['cat-item', currentCat === cat.id ? 'active' : '']"
+          @click="currentCat = cat.id">
+          {{ cat.name }}
         </view>
       </view>
 
       <scroll-view class="product-list" scroll-y>
-        <view v-for="cat in menu" :key="cat.categoryId" v-show="currentCat === cat.categoryId">
-          <view v-for="p in cat.products" :key="p.id" class="product-item">
+        <view v-for="cat in menu" :key="cat.id" v-show="currentCat === cat.id">
+          <view v-for="p in cat.items" :key="p.id" class="product-item">
             <image :src="p.imageUrl" class="product-img" mode="aspectFill" />
             <view class="product-info">
               <text class="product-name">{{ p.name }}</text>
@@ -37,8 +37,8 @@
 
     <view class="cart-bar" @click="showCart = true">
       <view class="cart-info">
-        <text class="cart-count">{{ cart.totalCount }}</text>
-        <text class="cart-amount">¥{{ cart.totalAmount }}</text>
+        <text class="cart-count">{{ totalCount }}</text>
+        <text class="cart-amount">¥{{ totalAmount }}</text>
       </view>
       <button class="btn-submit" @click.stop="submit">去结算</button>
     </view>
@@ -75,6 +75,15 @@ export default {
       showCart: false
     }
   },
+  computed: {
+    // 修复响应式丢失：在 Vue 组件内部通过 computed 监听 cart.items 变化来计算总数和总价
+    totalCount() {
+      return this.cart.items.reduce((sum, item) => sum + item.quantity, 0)
+    },
+    totalAmount() {
+      return this.cart.items.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2)
+    }
+  },
   onLoad() {
     this.login()
   },
@@ -84,17 +93,33 @@ export default {
       if (!token) {
         const { code } = await uni.login({ provider: 'weixin' })
         const res = await authApi.login(code)
-        uni.setStorageSync('token', res.data)
+        // 兼容你是否在 request.js 里包装了 res.data
+        uni.setStorageSync('token', res.data || res)
       }
       this.loadMenu()
     },
     async loadMenu() {
-      const res = await productApi.getMenu()
-      this.menu = res.data
-      if (this.menu.length) this.currentCat = this.menu[0].categoryId
+      // 修复点：加入 Loading 交互，防止网络慢时白屏干等
+      uni.showLoading({ title: '加载菜单中...', mask: true })
+      try {
+        const res = await productApi.getMenu()
+        // 兼容数据结构层级
+        this.menu = res.data || res
+        
+        // 修复点：默认选中分类改为 id
+        if (this.menu && this.menu.length > 0) {
+          this.currentCat = this.menu[0].id
+        }
+      } catch (err) {
+        uni.showToast({ title: '加载失败', icon: 'none' })
+      } finally {
+        uni.hideLoading()
+      }
     },
     submit() {
-      if (!cart.totalCount) return uni.showToast({ title: '请先选择商品', icon: 'none' })
+      if (this.totalCount === 0) {
+        return uni.showToast({ title: '请先选择商品', icon: 'none' })
+      }
       uni.navigateTo({ url: '/pages/order/submit' })
     }
   }

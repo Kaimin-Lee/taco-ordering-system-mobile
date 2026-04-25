@@ -1,0 +1,23 @@
+
+.container { padding: 30rpx;
+}
+.form { background: #fff; padding: 30rpx; border-radius: 8rpx; margin-bottom: 20rpx;
+}
+.form-item { margin-bottom: 30rpx;
+}
+.label { display: block; font-size: 28rpx; margin-bottom: 10rpx;
+}
+input, textarea { width: 100%; padding: 20rpx; border: 1rpx solid #ddd; border-radius: 8rpx; font-size: 28rpx;
+}
+textarea { height: 150rpx;
+}
+.order-list { background: #fff; padding: 30rpx; border-radius: 8rpx; margin-bottom: 20rpx;
+}
+.order-item { display: flex; justify-content: space-between; padding: 20rpx 0; border-bottom: 1rpx solid #eee;
+}
+.total { background: #fff; padding: 30rpx; border-radius: 8rpx; display: flex; justify-content: space-between; font-size: 32rpx; font-weight: bold;
+}
+.amount { color: #ff4d4f;
+}
+.btn-submit { background: #409eff; color: #fff; padding: 30rpx; border-radius: 8rpx; font-size: 32rpx; margin-top: 30rpx; border: none;
+}
