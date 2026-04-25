@@ -3,16 +3,21 @@ const common_vendor = require("../../common/vendor.js");
 const api_index = require("../../api/index.js");
 const store_cart = require("../../store/cart.js");
 const _sfc_main = {
+  // ✅ 1. 使用 setup() 把 cart 暴露给模板，避开 data() 的深度序列化
+  setup() {
+    return {
+      cart: store_cart.cart
+    };
+  },
   data() {
     return {
       menu: [],
       currentCat: null,
-      cart: store_cart.cart,
+      // ❌ 2. 从这里把 cart 删掉
       showCart: false
     };
   },
   computed: {
-    // 修复响应式丢失：在 Vue 组件内部通过 computed 监听 cart.items 变化来计算总数和总价
     totalCount() {
       return this.cart.items.reduce((sum, item) => sum + item.quantity, 0);
     },
@@ -47,7 +52,6 @@ const _sfc_main = {
         if (!Array.isArray(data)) {
           console.error("⚠️ 后端返回的不是分类数组，请检查后端接口:", data);
           data = [];
-          common_vendor.index.showToast({ title: "接口数据异常", icon: "none" });
         }
         this.menu = data;
         if (this.menu && this.menu.length > 0) {
@@ -86,15 +90,15 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
             b: common_vendor.t(p.name),
             c: common_vendor.t(p.description),
             d: common_vendor.t(p.price),
-            e: $data.cart.getCount(p.id) > 0
-          }, $data.cart.getCount(p.id) > 0 ? {
-            f: common_vendor.o(($event) => $data.cart.reduce(p.id), p.id)
+            e: $setup.cart.getCount(p.id) > 0
+          }, $setup.cart.getCount(p.id) > 0 ? {
+            f: common_vendor.o(($event) => $setup.cart.reduce(p.id), p.id)
           } : {}, {
-            g: $data.cart.getCount(p.id) > 0
-          }, $data.cart.getCount(p.id) > 0 ? {
-            h: common_vendor.t($data.cart.getCount(p.id))
+            g: $setup.cart.getCount(p.id) > 0
+          }, $setup.cart.getCount(p.id) > 0 ? {
+            h: common_vendor.t($setup.cart.getCount(p.id))
           } : {}, {
-            i: common_vendor.o(($event) => $data.cart.add(p), p.id),
+            i: common_vendor.o(($event) => $setup.cart.add(p), p.id),
             j: p.id
           });
         }),
@@ -109,15 +113,15 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     g: $data.showCart
   }, $data.showCart ? {
     h: common_vendor.o(($event) => {
-      $data.cart.clear();
+      $setup.cart.clear();
       $data.showCart = false;
     }),
-    i: common_vendor.f($data.cart.items, (item, k0, i0) => {
+    i: common_vendor.f($setup.cart.items, (item, k0, i0) => {
       return {
         a: common_vendor.t(item.name),
-        b: common_vendor.o(($event) => $data.cart.reduce(item.id), item.id),
+        b: common_vendor.o(($event) => $setup.cart.reduce(item.id), item.id),
         c: common_vendor.t(item.quantity),
-        d: common_vendor.o(($event) => $data.cart.add(item), item.id),
+        d: common_vendor.o(($event) => $setup.cart.add(item), item.id),
         e: item.id
       };
     }),

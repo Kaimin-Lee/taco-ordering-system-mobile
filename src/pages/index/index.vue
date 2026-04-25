@@ -67,17 +67,23 @@ import { authApi, productApi } from '@/api/index.js'
 import cart from '@/store/cart.js'
 
 export default {
+  // ✅ 1. 使用 setup() 把 cart 暴露给模板，避开 data() 的深度序列化
+  setup() {
+    return {
+      cart
+    }
+  },
   data() {
     return {
       menu: [],
       currentCat: null,
-      cart,
+      // ❌ 2. 从这里把 cart 删掉
       showCart: false
     }
   },
   computed: {
-    // 修复响应式丢失：在 Vue 组件内部通过 computed 监听 cart.items 变化来计算总数和总价
     totalCount() {
+      // 因为 setup() 里的返回值会自动挂载到 this 上，所以这里 this.cart 依然完美生效
       return this.cart.items.reduce((sum, item) => sum + item.quantity, 0)
     },
     totalAmount() {
@@ -96,7 +102,7 @@ export default {
           const res = await authApi.login(code)
           uni.setStorageSync('token', res.data || res)
         }
-        this.loadMenu() // 登录成功后再去加载菜单
+        this.loadMenu() 
       } catch (err) {
         console.error('微信登录失败，请检查后端是否启动:', err)
         uni.showToast({ title: '登录失败，请重试', icon: 'none' })
@@ -111,7 +117,6 @@ export default {
         if (!Array.isArray(data)) {
           console.error('⚠️ 后端返回的不是分类数组，请检查后端接口:', data)
           data = [] 
-          uni.showToast({ title: '接口数据异常', icon: 'none' })
         }
         
         this.menu = data

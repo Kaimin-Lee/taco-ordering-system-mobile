@@ -1,7 +1,7 @@
 "use strict";
 const common_vendor = require("../common/vendor.js");
 const BASE_URL = "http://localhost:8080/api";
-const request$1 = (url, options = {}) => {
+const request = (url, options = {}) => {
   const token = common_vendor.index.getStorageSync("token");
   return new Promise((resolve, reject) => {
     common_vendor.index.request({
@@ -27,10 +27,10 @@ const request$1 = (url, options = {}) => {
     });
   });
 };
-const request = {
-  get: (url, data) => request$1(url, { method: "GET", data }),
-  post: (url, data) => request$1(url, { method: "POST", data }),
-  put: (url, data) => request$1(url, { method: "PUT", data }),
-  delete: (url, data) => request$1(url, { method: "DELETE", data })
+const request$1 = {
+  get: (url, data) => request(url, { method: "GET", data }),
+  post: (url, data) => request(url, { method: "POST", data }),
+  put: (url, data) => request(url, { method: "PUT", data }),
+  delete: (url, data) => request(url, { method: "DELETE", data })
 };
-exports.request = request;
+exports.request = request$1;
