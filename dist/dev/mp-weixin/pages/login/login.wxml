@@ -1,0 +1,1 @@
+<view class="container"><view class="logo-section"><text class="logo">🌮</text><text class="title">街头塔可</text><text class="subtitle">欢迎您的光临</text></view><view class="login-section"><button class="login-btn" loading="{{b}}" bindtap="{{c}}"><text wx:if="{{a}}">微信一键登录</text><text wx:else>登录中...</text></button><text class="hint">登录即表示同意《用户协议》和《隐私政策》</text></view></view>

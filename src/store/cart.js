@@ -1,6 +1,8 @@
-// 全局购物车状态
+// src/store/cart.js
 import { reactive } from 'vue'
-const cart = {
+
+// 必须用 reactive 包裹整个对象，才能让 Vue 监听到数据的变化
+const cart = reactive({
   items: [],
 
   add(product) {
@@ -37,6 +39,6 @@ const cart = {
   clear() {
     this.items = []
   }
-}
+})
 
 export default cart

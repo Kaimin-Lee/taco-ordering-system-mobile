@@ -1,13 +1,15 @@
 {
   "pages": [
+    "pages/login/login",
     "pages/index/index",
-    "pages/order/order",
     "pages/order/submit",
-    "pages/my/my"
+    "pages/my/my",
+    "pages/orders/orders",
+    "pages/order/detail"
   ],
   "tabBar": {
     "color": "#999",
-    "selectedColor": "#409eff",
+    "selectedColor": "#fa8c16",
     "backgroundColor": "#fff",
     "list": [
       {
@@ -17,7 +19,7 @@
         "selectedIconPath": "static/images/menu-active.png"
       },
       {
-        "pagePath": "pages/order/order",
+        "pagePath": "pages/orders/orders",
         "text": "订单",
         "iconPath": "static/images/order.png",
         "selectedIconPath": "static/images/order-active.png"

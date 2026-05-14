@@ -1,19 +1,21 @@
 {
   "pages": [
+    { "path": "pages/login/login" },
     { "path": "pages/index/index" },
-    { "path": "pages/order/order" },
     { "path": "pages/order/submit" },
-    { "path": "pages/my/my" }
+    { "path": "pages/my/my" },
+    { "path": "pages/orders/orders" },
+    { "path": "pages/order/detail" }
   ],
   "window": {
     "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#409eff",
-    "navigationBarTitleText": "塔可点餐",
+    "navigationBarBackgroundColor": "#fa8c16",
+    "navigationBarTitleText": "街头塔可",
     "navigationBarTextStyle": "white"
   },
   "tabBar": {
     "color": "#999",
-    "selectedColor": "#409eff",
+    "selectedColor": "#fa8c16",
     "backgroundColor": "#fff",
     "list": [
       {
@@ -23,7 +25,7 @@
         "selectedIconPath": "static/images/menu-active.png"
       },
       {
-        "pagePath": "pages/order/order",
+        "pagePath": "pages/orders/orders",
         "text": "订单",
         "iconPath": "static/images/order.png",
         "selectedIconPath": "static/images/order-active.png"
